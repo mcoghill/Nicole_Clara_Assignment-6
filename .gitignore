@@ -8,6 +8,7 @@
 
 # User-specific files
 .Ruserdata
+*.tif
 
 # Example code in package build process
 *-Ex.R

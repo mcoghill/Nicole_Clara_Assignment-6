@@ -20,7 +20,7 @@ View(available_layers())
 All_BEC_zones<-bec()
 
 # !! to view all BC BEC zones, but loads a lot of data so slows down the computer!! 
-mapview(All_BEC_zones)
+# mapview(All_BEC_zones)
 
 # Check CRS of the BEC zone layers, 3005 confirmed
 crs(All_BEC_zones)
@@ -54,9 +54,21 @@ BEC_clip
 # to view LDB
 plot(BEC_clip)
 
+#########
+## 4/4 ##
+#########
+
 ### Q1- Calculate the total area of each of the resulting features in hectares
 # shows hectares in new (last column)
 BEC_clip_hectares <- BEC_clip %>% mutate(Feature_area_hectares = FEATURE_AREA_SQM/10000)
+
+#########
+## 1/2 ##
+#########
+
+## use the st_area() function to calculate the area of each of the features - the
+## FEATURE_AREA_SQM column contains areas of the entire polygon extending beyond
+## what was clipped.
 
 ### Q2- Create a bar plot where the “MAP_LABEL” column is along the X-axis, and the 
 # area is along the Y-axis. Display each bar using different colors.
@@ -66,6 +78,12 @@ ggplot(BEC_clip_hectares, aes(x= MAP_LABEL, y= Feature_area_hectares)) +
   geom_col()+
   labs(title = "Bar plot of Site variance (Map labels)", 
        x= "Site variance", y = "Area (hectares)")
+
+#########
+## 4/5 ##
+#########
+
+## Each of the bars should be a different color.
 
 ### Q3 Extract the mean elevation of each of the features 
 # (you will need to pull in the DEM from the “cded_terra” function)
@@ -99,7 +117,7 @@ plot(Site_dem_mask, colNA = "grey")
 # extracting the elevation for the aoi (elevation was a raster layer so now
 # extracting it as a dataframe)
 BEC_zones_elevation <- terra::extract(Site_dem_mask, BEC_clip_hectares,
-  fun = mean, na.rm = TRUE, )
+  fun = mean, na.rm = TRUE)
 
 # see the mean elevation values
 BEC_zones_elevation
@@ -108,6 +126,13 @@ BEC_zones_elevation
 BEC_zones_LDB<-BEC_clip_hectares %>% 
   mutate("Mean elevation"= BEC_zones_elevation)
 
+#########
+## 4/4 ##
+#########
+
+## There is a more concise way of doing this, but this works as well.
+
+
 ### Q4 Create a mapview of the BEC vector layer, coloring the polygons by their subzone label.
 
 
@@ -115,3 +140,14 @@ BEC_zones_LDB<-BEC_clip_hectares %>%
 
 
 mapview(BEC_clip_hectares, zcol = "SUBZONE")
+
+#########
+## 2/2 ##
+#########
+
+
+## Part 2 total:
+
+###########
+## 14/17 ##
+###########

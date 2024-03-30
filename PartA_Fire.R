@@ -44,15 +44,25 @@ fires_aoi <- bcdc_query_geodata(fire_search[[1]]$id, crs = 3005) %>%
 
 mapview(fires_aoi)
 
-
+#########
+## 4/4 ##
+#########
 
 fires_summary <- fire_incidents_ldb %>%
   group_by(FIRE_YEAR) %>%
   summarize(fires_count = n())
 
+#########
+## 2/2 ##
+#########
+
 cause_summary <- fire_incidents_ldb %>%
   group_by(FIRE_CAUSE) %>%
   summarize(fires_count = n())
+
+#########
+## 2/2 ##
+#########
 
 ##FIRE_CAUSE   fires_count
 ##Lightning    63
@@ -61,23 +71,41 @@ cause_summary <- fire_incidents_ldb %>%
 
 mapview(fire_incidents_ldb, zcol = "FIRE_CAUSE")
 
+#########
+## 2/2 ##
+#########
+
 mean_fires_per_year <- fire_incidents_ldb %>%
   group_by(FIRE_YEAR) %>%
   summarize(mean_fires_per_year = n())
 
 mean_fires_by_cause <- fire_incidents_ldb %>%
   group_by(FIRE_CAUSE, FIRE_YEAR) %>%
-  summarize(fires_per_year = n()) %>%
-  group_by(FIRE_CAUSE) %>%
-  summarize(mean_fires_per_year = mean(fires_per_year))
+  summarize(fires_per_year = n()) # %>%
+  # group_by(FIRE_CAUSE) %>%
+  # summarize(mean_fires_per_year = mean(fires_per_year))
 
-ggplot(mean_fires_by_cause, aes(x = FIRE_CAUSE, y = mean_fires_per_year, fill = FIRE_CAUSE)) +
+ggplot(mean_fires_by_cause, aes(x = FIRE_CAUSE, y = fires_per_year, fill = FIRE_CAUSE)) +
   geom_boxplot() +
   labs(x = "Fire Cause", y = "Mean Fires per Year") +
   theme_minimal()
 
 ##a bar chart may display the data better:
-ggplot(cause_summary, aes(x = FIRE_CAUSE, y = fires_count, fill = FIRE_CAUSE)) +
-  geom_bar(stat = "identity") +
-  labs(x = "Fire Cause", y = "Fires Count") +
-  scale_fill_discrete(name = "Fire Cause")
+# ggplot(cause_summary, aes(x = FIRE_CAUSE, y = fires_count, fill = FIRE_CAUSE)) +
+#   geom_bar(stat = "identity") +
+#   labs(x = "Fire Cause", y = "Fires Count") +
+#   scale_fill_discrete(name = "Fire Cause")
+
+#########
+## 4/5 ##
+#########
+
+## You were so close with the summary - mean_fires_by_cause just needed the 
+## first three lines, the other two were not needed. Great job!
+
+
+## Part 1 total:
+
+###########
+## 14/15 ##
+###########
